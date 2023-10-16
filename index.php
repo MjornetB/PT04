@@ -93,5 +93,5 @@ function obtenirTotalPagines($conn, $articulosPorPagina){
 }
 
 
-require "index.vista.php"
+require_once "index.vista.php"
 ?>

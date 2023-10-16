@@ -5,12 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar</title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="estil_register.css">
 </head>
 
 <body>
-
-
+<div class="topnav">
+  <a href="index.php">Home</a>
+  <a class="active" href="register.vista.php">Register</a>
+  <div class="login-container">
+    <form action="login.php" method="POST">
+      <input type="text" placeholder="Username" name="username">
+      <input type="text" placeholder="Password" name="psw">
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</div>
     <div class="container">
         <form action="register.php" method="post" id="form">
             <div class="mt-5 mb-5 flex-column text-center">
