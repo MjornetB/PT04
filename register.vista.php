@@ -11,7 +11,7 @@
 <body>
 <div class="topnav">
   <a href="index.php">Home</a>
-  <a class="active" href="register.vista.php">Register</a>
+  <a class="active" href="register.php">Register</a>
   <div class="login-container">
     <form action="login.php" method="POST">
       <input type="text" placeholder="Username" name="username">
@@ -45,7 +45,7 @@
                 <label>Repita su contraseña: </label>
                 <input type="password2" class="form-control mb-4" placeholder="Pass" name="password2">
             </div>
-            <input type="submit" name="submit" value="Registre"></input>
+            <input type="submit" name="submit" value="Registro"></input>
         </form>
     </div>
 </body>

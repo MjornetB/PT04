@@ -39,12 +39,22 @@ try {
   }
 
   function registerUserBBDD($conn, $name, $email, $password){
-    $stmt = $conn->prepare("INSERT INTO usuaris (name, email, password) VALUES (:name, :email, :password)");
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':email', $email);
-    $stmt->bindParam(':password', $password);
-    $stmt->execute();
+    try {
+      $stmt = $conn->prepare("INSERT INTO usuaris (name, email, password) VALUES (:name, :email, :password)");
+      $stmt->bindParam(':name', $name);
+      $stmt->bindParam(':email', $email);
+      $stmt->bindParam(':password', $password);
+      $stmt->execute();
+      echo "Usuario creado correctamente";
+  } catch (PDOException $e) {
+    if ($e->errorInfo[1] == 1062) {
+        // Codi d'error 1062: 'Duplicate entry' (entrada duplicada) per a la clau primària
+        echo "El usuario con el email $email ya existe.";
+    } else {
+        echo "Error al insertar el usuario: " . $e->getMessage();
+    }
   }
+}
 
   
 
@@ -93,5 +103,5 @@ function obtenirTotalPagines($conn, $articulosPorPagina){
 }
 
 
-require_once "index.vista.php"
+include "index.vista.php"
 ?>

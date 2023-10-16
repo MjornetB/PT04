@@ -15,10 +15,10 @@
 <body>
 <!-- Barra login/register -->
 <div class="topnav">
-  <a class="active" href="#home">Home</a>
-  <a href="register.vista.php">Register</a>
+  <a class="active" href="index.php">Home</a>
+  <a href="register.php">Register</a>
   <div class="login-container">
-    <form action="/action_page.php">
+    <form action="login.php" method="POST">
       <input type="text" placeholder="Username" name="username">
       <input type="text" placeholder="Password" name="psw">
       <button type="submit">Login</button>
