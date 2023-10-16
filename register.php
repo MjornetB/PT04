@@ -1,15 +1,14 @@
 <?PHP
-require "index.php";
-if(isset($_REQUEST["name"])){
+require "mainFunctions.php";
 
-$name = $_REQUEST["name"];
-$email= $_REQUEST["email"];
-$password = $_REQUEST["password"];
-$password2 = $_REQUEST["password2"];
+$name = $_POST["name"];
+$email= $_POST["email"];
+$password = $_POST["password"];
+$password2 = $_POST["password2"];
 
 
 //Comprovem les dades introduides
-if($name == ""){
+if($name == null){
     $errores[] = "El nombre es requerido";
 }
 elseif(!preg_match('/^[a-zA-Z0-9]{5,16}$/', $name)){
@@ -38,15 +37,7 @@ if ($password != $password2){
 $password = password_hash($password, PASSWORD_BCRYPT);
 
 if (isset($_POST['submit']) && empty($errores)) {
-registerUserBBDD($conn, $name, $email, $password);
-}
-elseif(isset($_POST['submit']) && !empty($errores)){
-    echo "<div class='alert alert-danger'>";
-    foreach ($errores as $error){
-        echo "<li>$error</li>";
-    }
-    echo "</div>";
-}
+$errores[] = registerUserBBDD($conn, $name, $email, $password);
 }
 include "register.vista.php";
 ?>

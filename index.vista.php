@@ -16,7 +16,7 @@
 <!-- Barra login/register -->
 <div class="topnav">
   <a class="active" href="index.php">Home</a>
-  <a href="register.php">Register</a>
+  <a href="register.vista.php">Register</a>
   <div class="login-container">
     <form action="login.php" method="POST">
       <input type="text" placeholder="Username" name="username">

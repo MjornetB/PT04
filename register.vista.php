@@ -43,9 +43,20 @@
             </div>
             <div class="form-group">
                 <label>Repita su contraseña: </label>
-                <input type="password2" class="form-control mb-4" placeholder="Pass" name="password2">
+                <input type="password" class="form-control mb-4" placeholder="Pass" name="password2">
             </div>
             <input type="submit" name="submit" value="Registro"></input>
+            <span>
+                <?php
+                if (isset($_POST['submit']) && !empty($errores)) {
+                    echo "<div class='alert alert-danger'>";
+                    foreach ($errores as $error) {
+                        echo "<li>$error</li>";
+                    }
+                    echo "</div>";
+                }
+                ?>
+            </span>
         </form>
     </div>
 </body>
