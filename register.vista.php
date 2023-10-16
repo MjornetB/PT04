@@ -12,13 +12,6 @@
 <div class="topnav">
   <a href="index.php">Home</a>
   <a class="active" href="register.php">Register</a>
-  <div class="login-container">
-    <form action="login.php" method="POST">
-      <input type="text" placeholder="Username" name="username">
-      <input type="text" placeholder="Password" name="psw">
-      <button type="submit">Login</button>
-    </form>
-  </div>
 </div>
     <div class="container">
         <form action="register.php" method="post" id="form">
