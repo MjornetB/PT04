@@ -19,7 +19,7 @@
   <a href="register.vista.php">Register</a>
   <div class="login-container">
     <form action="login.php" method="POST">
-      <input type="text" placeholder="Username" name="username">
+      <input type="text" placeholder="User" name="username">
       <input type="text" placeholder="Password" name="psw">
       <button type="submit">Login</button>
     </form>

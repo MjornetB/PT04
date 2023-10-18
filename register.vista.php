@@ -24,11 +24,11 @@
 
             <div class="form-group">
                 <label>Introduzca su usuario: </label>
-                <input type="text" class="form-control mb-4" placeholder="name" name="name">
+                <input type="text" class="form-control mb-4" placeholder="name" name="name" value="<?php if(isset($_POST['name']) && !empty($errores)){echo ($_POST['name']);} ?>">
             </div>
             <div class="form-group">
                 <label>Introduzca su email</label>
-                <input type="email" class="form-control mb-4" placeholder="email" name="email">
+                <input type="text" class="form-control mb-4" placeholder="email" name="email" value="<?php if(isset($_POST['email']) && !empty($errores)){echo ($_POST['email']);} ?>">
             </div>
             <div class="form-group">
                 <label>Introduzca una contraseña segura: </label>

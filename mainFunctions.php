@@ -17,11 +17,27 @@ function registerUserBBDD($conn, $name, $email, $password){
   } catch (PDOException $e) {
     if ($e->errorInfo[1] == 1062) {
         // Codi d'error 1062: 'Duplicate entry' (entrada duplicada) per a la clau primària
-        return "El usuario con el email $email ya existe.";
+        return "El usuario $name ya existe.";
     } else {
         return "Error al insertar el usuario: " . $e->getMessage();
     }
   }
+}
+
+function realitzarLogin($conn, $nameToLogin, $passwordToLogin){
+    try {
+        $stmt = $conn->prepare("SELECT contrasenya FROM usuaris WHERE nom = :nom");
+        $stmt->bindParam(':nom', $nameToLogin);
+        $stmt->execute();
+        $resultat = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (password_verify($passwordToLogin, $resultat['contrasenya'])) {
+            return "Correcto";
+        } else {
+            return "Login incorrecto";
+        }
+    } catch (PDOException $e) {
+        return "Error al realizar el login: " . $e->getMessage();
+    }
 }
 
 
