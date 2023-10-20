@@ -40,5 +40,43 @@ function realitzarLogin($conn, $nameToLogin, $passwordToLogin){
     }
 }
 
+function mostrarArticulosUsersBBDD($conn, $articulosPorPagina, $offset, $usuariLogat){
+  $stmtTemp = $conn->prepare("SELECT id FROM usuaris WHERE nom = :nom");
+  $stmtTemp->bindParam(':nom', $usuariLogat);
+  $stmtTemp->execute();
+  $resultatTemp = $stmtTemp->fetch(PDO::FETCH_ASSOC);
+  $_SESSION['idUser'] = $resultatTemp["id"];
+
+  $stmt = $conn->prepare("SELECT * FROM articles WHERE id_usuaris = :idUser LIMIT :offset, :articulosPorPagina");
+  $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+  $stmt->bindParam(':articulosPorPagina', $articulosPorPagina, PDO::PARAM_INT);
+  $stmt->bindParam(':idUser', $resultatTemp['id']);
+  $stmt->execute();
+  
+
+  echo '<ul>';
+  
+  while ($resultat = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      echo '<li>' . $resultat['id'] . ' ' . htmlspecialchars($resultat['article']) . '</li>';
+  }
+  
+  echo '</ul>';
+}
+
+function crearArticle($conn, $article){
+    $idUser = $_SESSION['idUser'];
+    $stmt = $conn->prepare("INSERT INTO articles (article, id_usuaris) VALUES (?, ?)");
+      $stmt->bindParam(1, $article);
+      $stmt->bindParam(2, $idUser);
+      $stmt->execute();
+}
+
+
+function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+  }
 
 ?>

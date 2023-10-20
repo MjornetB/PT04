@@ -1,7 +1,7 @@
 <?php
 require_once "mainFunctions.php";
-$nameToLogin = $_POST["name"];
-$passwordToLogin = $_POST["password"];
+$nameToLogin = $_POST["username"];
+$passwordToLogin = $_POST["psw"];
 
 
 $ferLogin = realitzarLogin($conn, $nameToLogin, $passwordToLogin);
