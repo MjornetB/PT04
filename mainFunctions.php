@@ -69,6 +69,36 @@ function crearArticle($conn, $article){
       $stmt->bindParam(1, $article);
       $stmt->bindParam(2, $idUser);
       $stmt->execute();
+        return true;
+}
+
+function verificarSiArticleEsPropi($conn, $id){
+  $idUser = $_SESSION['idUser'];
+  $stmtTemp = $conn->prepare("SELECT * FROM articles WHERE id = ?");
+  $stmtTemp->bindParam(1, $id);
+  $stmtTemp->execute();
+  $resultat = $stmtTemp->fetch(PDO::FETCH_ASSOC);
+
+    if ($resultat && isset($resultat['id_usuaris']) && $resultat['id_usuaris'] == $idUser){
+      return true;
+    }
+    else return false;
+}
+
+function borrarArticle($conn, $id){
+  $stmtTemp = $conn->prepare("SELECT * FROM articles WHERE id = ?");
+  $stmtTemp->bindParam(1, $id);
+  $stmtTemp->execute();
+  $resultat = $stmtTemp->fetch(PDO::FETCH_ASSOC);
+
+  if ($resultat == ""){
+      return false;
+  }else{
+  $stmt = $conn->prepare("DELETE FROM articles WHERE id = ?");
+  $stmt->bindParam(1, $id);
+  $stmt->execute();
+    return true;
+  }
 }
 
 

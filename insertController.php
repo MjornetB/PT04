@@ -2,14 +2,11 @@
 //MARC JORNET BOEIRA Incluim la connexió, les vistas i les funcions principals.
 require_once "env.php";
 require_once "mainFunctions.php";
-$article;
+$article = "";
+$errores = array();
 session_start();
 //Inicialitzem la connexió.
-if (isset($article)){
-try {
-
-  $conn = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME, DB_USERNAME, DB_PASSWORD);
-
+if ((isset($_POST['enviaArticle']))){
   $article = test_input($_POST["article"]);
 
 
@@ -20,16 +17,14 @@ try {
     $errores[] = "El artículo contiene caracteres no permitidos";
     };
   
-  if (isset($_POST['enviarArticle']) && empty($errores)) {
-    crearArticle($conn, $article);
-  } else {
-    echo "Error al insertar el articulo <br>";
-    echo $errores[0];
+  if (empty($errores)) {
+    $crearArticle = crearArticle($conn, $article);
+    if ($crearArticle){
+      $successMessage = "El artículo se ha creado correctamente!";
+    } else {
+      $errores[] = "Error al crear el artículo";
+    }
   }
-} catch (PDOException $e) {
-  echo "Error: " . $e->getMessage();
-}
-$conn = null;
 }
 include_once "insertVista.php";
 ?>

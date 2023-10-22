@@ -2,7 +2,9 @@
 <html lang="en">
 <?php
 require_once "mainFunctions.php";
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 if (!isset($_SESSION['user'])){
 	header("Location: logout.php");
 }
@@ -22,7 +24,7 @@ if (!isset($_SESSION['user'])){
 <body>
 <!-- Barra login/register -->
 <div class="topnav">
-  <a class="active" href="index.php">Home</a>
+  <a class="active" href="webLogada.php">Home</a>
   <a href="logout.php">Cierra sesión</a>
 </div>
 
@@ -45,11 +47,25 @@ if (!isset($_SESSION['user'])){
 				<a href="Vistes/modify.php"><button class="botoMenu">Modifica un articulo</button></a><br>
 				<a href="Vistes/delete.php"><button class="botoMenu">Borra un articulo</button></a><br>
 			</div>
-			<label>Esborra un article per el seu ID</label>
-			<form action="esborrarArticle.php" method="post">
+			<label>Borra un artículo por su ID</label>
+			<form action="deleteController.php" method="post">
 				<input type="text" style="width : 40px; heigth : 40px" name="id" placeholder="ID">
-				<input type="submit" name="enviaArticle" value="Esborrar">
+				<input type="submit" name="esborraArticle" value="Borrar">
 			</form>
+			<!-- Missatje d'exit o errors -->
+				<?php if (isset($successMessage)): ?>
+    			<div class="success-message"><?php echo $successMessage; ?></div>
+				<?php endif; ?>
+
+				<?php if (!empty($errores)): ?>
+					<div class="error-message">
+						<?php foreach ($errores as $error): ?>
+							<p><?php echo $error; ?></p>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+
+
 			<label>Modifica un article per el seu ID</label>
 			<form action="modificarArticle.php" method="post">
 				<input type="text" style="width : 40px; heigth : 40px" name="id" placeholder="ID">
