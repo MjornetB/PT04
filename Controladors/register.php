@@ -1,5 +1,17 @@
 <?PHP
-require "mainFunctions.php";
+//MARC JORNET BOEIRA
+require_once "../env.php";
+require_once "../mainFunctions.php";
+
+$name = "";
+$email = "";
+$password = "";
+$password2 = "";
+$errores = array();
+
+//Comprova si l'usuari ha enviat el formulari
+if (isset($_POST['submit'])) {
+    
 
 $name = $_POST["name"];
 $email= $_POST["email"];
@@ -34,10 +46,12 @@ if ($password != $password2){
     $errores[] = "Las contraseñas no coinciden";
 }
 
+//Encriptem la contrasenya
 $password = password_hash($password, PASSWORD_BCRYPT);
-
+//Si no hi ha errors, es crea l'usuari
 if (isset($_POST['submit']) && empty($errores)) {
 $errores[] = registerUserBBDD($conn, $name, $email, $password);
 }
-include "register.vista.php";
+};
+include "../Vistes/register.vista.php";
 ?>

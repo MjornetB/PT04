@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--  Marc Jornet Boeira -->
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar</title>
-    <link rel="stylesheet" href="estil_register.css">
+    <link rel="stylesheet" href="../Estils/estil_register.css">
 </head>
-
+<!-- Barra per tornar al home -->
 <body>
 <div class="topnav">
-  <a href="index.php">Home</a>
-  <a class="active" href="register.php">Register</a>
+  <a href="../Controladors/index.php">Home</a>
+  <a class="active" href="../Controladors/register.php">Registro</a>
 </div>
     <div class="container">
-        <form action="register.php" method="post" id="form">
+
+        <!-- Formulari de registre -->
+        <form action="../Controladors/register.php" method="post" id="form">
             <div class="mt-5 mb-5 flex-column text-center">
                 <div class="mx-auto d-block">
                     <h3>Articulos</h3>

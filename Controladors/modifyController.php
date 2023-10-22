@@ -1,10 +1,11 @@
 <?php
-//MARC JORNET BOEIRA Incluim la connexió, les vistas i les funcions principals.
-require_once "env.php";
-require_once "mainFunctions.php";
+//MARC JORNET BOEIRA
+require_once "../env.php";
+require_once "../mainFunctions.php";
 $id = "";
 $article = "";
 $erroresModify = array();
+//Comprova si l'usuari esta loguejat, si no ho esta, el redirigeix a la pagina de logout.php
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -12,11 +13,12 @@ if (!isset($_SESSION['user'])) {
     header("Location: logout.php");
     exit; 
 }
-//Inicialitzem la connexió.
+//Comprova si l'usuari ha enviat el formulari de modificar article
 if ((isset($_POST['modificaArticle']))){
   $id = test_input($_POST["id"]);
   $article = test_input($_POST["article"]);
 
+  //Comprova si l'id i l'article son valids
     if ($id == "") {
         $erroresModify[] = "El ID del artículo es requerido";
     } elseif (!preg_match('/^\d+$/', $id)) {
@@ -33,6 +35,7 @@ if ((isset($_POST['modificaArticle']))){
     //Comprova si l'article que l'usuari vol modificar es seu
     $modifyVerificator = verificarSiArticleEsPropi($conn, $id);
 
+    //Si no hi ha errors, es modifica l'article
     if (empty($erroresModify)) {
         if ($modifyVerificator) {
             $modificaArticle = modificaArticle($conn, $id, $article);
@@ -46,6 +49,5 @@ if ((isset($_POST['modificaArticle']))){
         }
     }
     include_once "webLogada.php";
-    //header("Location: webLogada.php");
 }
 ?>

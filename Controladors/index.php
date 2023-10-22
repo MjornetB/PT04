@@ -1,12 +1,5 @@
 <?php 
-require "env.php";
-require_once "mainFunctions.php";
-if (session_status() == PHP_SESSION_NONE) {
-	session_start();
-}
-if (!isset($_SESSION['user'])) {
-	header("Location: logout.php");
-}
+require "../env.php";
 // Marc Jornet Boeira
 // condicional que serveix per establir quants articles es mostraran per pagina, si no hi ha cap seleccio es mostraran 5 articles per pagina.
 if (isset($_GET['seleccionArticulos'])) {
@@ -44,6 +37,31 @@ try {
   if ($paginaActual > $numPagines || $paginaActual <= 0){
     $paginaActual = 1;
   }
+  
+  /**
+   * mostrarArticulosBBDD es la funcio que mostra els articles de la base de dades fent una coneiexio a la base de dades i fent una consulta a la base de dades
+   * per mostrar els articles que hi ha a la base de dades.
+   *
+   * @param  mixed $conn es la conexxiom a la base de dades
+   * @param  mixed $articulosPorPagina es el numero de articles que es mostraran per pagina
+   * @param  mixed $offset es el numero de articles que es saltaran per poder veure els seguents articles tot el rato.
+   * @return void
+   */
+  function mostrarArticulosBBDD($conn, $articulosPorPagina, $offset){
+    $stmt = $conn->prepare("SELECT * FROM articles LIMIT :offset, :articulosPorPagina");
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':articulosPorPagina', $articulosPorPagina, PDO::PARAM_INT);
+    $stmt->execute();
+    
+
+    echo '<ul>';
+    
+    while ($resultat = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        echo '<li>' . htmlspecialchars($resultat['article']) . '</li>';
+    }
+    
+    echo '</ul>';
+}
 
 /**
  * obtenirTotalPagines es la funcio que obté el total de pagines que hi ha a la base de dades fent una consulta a la base de dades
@@ -55,15 +73,13 @@ try {
  * @return int $totalPagines es el total de pagines que hi ha a la base de dades
  */
 function obtenirTotalPagines($conn, $articulosPorPagina){
-  $stmt = $conn->prepare("SELECT COUNT(*) FROM articles WHERE id_usuaris = ?");
-  $stmt->bindParam(1, $_SESSION['idUser']);
+  $stmt = $conn->prepare("SELECT COUNT(*) FROM articles");
   $stmt->execute();
   $totalArticles = $stmt->fetchColumn();
   $totalPagines = ceil($totalArticles / $articulosPorPagina);
-  
   return $totalPagines;
 }
 
 
-include "webLogada.vista.php"
+include "../Vistes/index.vista.php"
 ?>
