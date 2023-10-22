@@ -4,7 +4,7 @@ require_once "env.php";
 require_once "mainFunctions.php";
 $id = "";
 $article = "";
-$errores = array();
+$erroresModify = array();
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -13,29 +13,36 @@ if (!isset($_SESSION['user'])) {
     exit; 
 }
 //Inicialitzem la connexió.
-if ((isset($_POST['esborraArticle']))){
+if ((isset($_POST['modificaArticle']))){
   $id = test_input($_POST["id"]);
-
+  $article = test_input($_POST["article"]);
 
     if ($id == "") {
-        $errores[] = "El ID del artículo es requerido";
+        $erroresModify[] = "El ID del artículo es requerido";
     } elseif (!preg_match('/^\d+$/', $id)) {
-        $errores[] = "El ID del artículo debe ser un número";
+        $erroresModify[] = "El ID del artículo debe ser un número";
     }
+    if ($article == "") {
+        $erroresModify[] = "No puedes dejar el artículo resultante vacío";
+      } 
+      elseif (!preg_match('/^[a-zA-Z0-9\s,.-]*$/', $article)) {
+        $erroresModify[] = "El artículo contiene caracteres no permitidos";
+        };
+      
 
-    //Comprova si l'article que l'usuari vol esborrar es seu
-    $deleteVerificator = verificarSiArticleEsPropi($conn, $id);
+    //Comprova si l'article que l'usuari vol modificar es seu
+    $modifyVerificator = verificarSiArticleEsPropi($conn, $id);
 
-    if (empty($errores)) {
-        if ($deleteVerificator) {
-            $borrarArticle = borrarArticle($conn, $id);
-            if ($borrarArticle) {
-                $successMessage = "El artículo se ha borrado correctamente!";
+    if (empty($erroresModify)) {
+        if ($modifyVerificator) {
+            $modificaArticle = modificaArticle($conn, $id, $article);
+            if ($modificaArticle) {
+                $successMessageModify = "El artículo se ha modificado correctamente!";
             } else {
-                $errores[] = "El artículo que desea borrar no existe";
+                $erroresModify[] = "El artículo que desea modificar no existe";
             }
         } else {
-            $errores[] = "El artículo que intenta borrar o no existe o no es suyo";
+            $erroresModify[] = "El artículo que intenta modificar o no existe o no es suyo";
         }
     }
     include_once "webLogada.php";

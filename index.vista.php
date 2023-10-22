@@ -20,7 +20,7 @@
   <div class="login-container">
     <form action="login.php" method="POST">
       <input type="text" placeholder="User" name="username">
-      <input type="text" placeholder="Password" name="psw">
+      <input type="text"  placeholder="Password" name="psw">
       <button type="submit">Login</button>
     </form>
   </div>

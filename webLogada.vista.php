@@ -3,13 +3,14 @@
 <?php
 require_once "mainFunctions.php";
 if (session_status() == PHP_SESSION_NONE) {
-    session_start();
+	session_start();
 }
-if (!isset($_SESSION['user'])){
+if (!isset($_SESSION['user'])) {
 	header("Location: logout.php");
 }
 ?>
 <!--  Marc Jornet Boeira -->
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -22,18 +23,18 @@ if (!isset($_SESSION['user'])){
 </head>
 
 <body>
-<!-- Barra login/register -->
-<div class="topnav">
-  <a class="active" href="webLogada.php">Home</a>
-  <a href="logout.php">Cierra sesión</a>
-</div>
+	<!-- Barra login/register -->
+	<div class="topnav">
+		<a class="active" href="webLogada.php">Home</a>
+		<a href="logout.php">Cierra sesión</a>
+	</div>
 
 	<div class="contenidor">
 		<h1>Articulos</h1>
 		<section class="articles"> <!--aqui guardem els articles-->
 			<?php
 			//Crida de la funció, per mostrar els articles a la vista
-			mostrarArticulosUsersBBDD($conn, $articulosPorPagina, $paginaActual, $_SESSION['user']);
+			mostrarArticulosUsersBBDD($conn, $articulosPorPagina, $offset, $_SESSION['user']);
 			?>
 		</section>
 
@@ -41,38 +42,65 @@ if (!isset($_SESSION['user'])){
 
 
 
-        <div class="AccionsUsuaris">
-			<div>
-				<a href="insertController.php"><button class="botoMenu">Crea un articulo</button></a><br>
-				<a href="Vistes/modify.php"><button class="botoMenu">Modifica un articulo</button></a><br>
-				<a href="Vistes/delete.php"><button class="botoMenu">Borra un articulo</button></a><br>
-			</div>
+		<div class="AccionsUsuaris">
+
+			<label>Crea un artículo</label>
+			<form action="insertController.php" method="post">
+				<input type="text" name="article" placeholder="Artículo" style="width : 400px; heigth : 400px">
+				<input type="submit" name="enviaArticle" value="Añadir">
+			</form>
+			<!-- Missatje d'exit o errors -->
+			<?php if (isset($successMessageInsert)) : ?>
+				<div class="success-message"><?php echo $successMessageInsert; ?></div>
+			<?php endif; ?>
+
+			<?php if (!empty($erroresInsert)) : ?>
+				<div class="error-message">
+					<?php foreach ($erroresInsert as $error) : ?>
+						<p><?php echo $error; ?></p>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
+
+
 			<label>Borra un artículo por su ID</label>
 			<form action="deleteController.php" method="post">
 				<input type="text" style="width : 40px; heigth : 40px" name="id" placeholder="ID">
 				<input type="submit" name="esborraArticle" value="Borrar">
 			</form>
 			<!-- Missatje d'exit o errors -->
-				<?php if (isset($successMessage)): ?>
-    			<div class="success-message"><?php echo $successMessage; ?></div>
-				<?php endif; ?>
+			<?php if (isset($successMessageDelete)) : ?>
+				<div class="success-message"><?php echo $successMessageDelete; ?></div>
+			<?php endif; ?>
 
-				<?php if (!empty($errores)): ?>
-					<div class="error-message">
-						<?php foreach ($errores as $error): ?>
-							<p><?php echo $error; ?></p>
-						<?php endforeach; ?>
-					</div>
-				<?php endif; ?>
+			<?php if (!empty($erroresDelete)) : ?>
+				<div class="error-message">
+					<?php foreach ($erroresDelete as $error) : ?>
+						<p><?php echo $error; ?></p>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
 
 
-			<label>Modifica un article per el seu ID</label>
-			<form action="modificarArticle.php" method="post">
+			<label>Modifica un artículo mediante el ID</label>
+			<form action="modifyController.php" method="post">
 				<input type="text" style="width : 40px; heigth : 40px" name="id" placeholder="ID">
-				<input type="text" name="article" placeholder="Article">
-				<input type="submit" name="enviaArticle" value="Modificar">
+				<input type="text" name="article" value="<?php if(isset($_POST['article']) && !empty($erroresModify)){echo ($_POST['article']);} ?>" placeholder="Artículo" style="width : 400px; heigth : 400px">
+				<input type="submit" name="modificaArticle" value="Modificar">
 			</form>
-        </div>
+			<!-- Missatje d'exit o errors -->
+			<?php if (isset($successMessageModify)) : ?>
+				<div class="success-message"><?php echo $successMessageModify; ?></div>
+			<?php endif; ?>
+
+			<?php if (!empty($erroresModify)) : ?>
+				<div class="error-message">
+					<?php foreach ($erroresModify as $error) : ?>
+						<p><?php echo $error; ?></p>
+					<?php endforeach; ?>
+				</div>
+			<?php endif; ?>
+		</div>
 
 
 		<!--  Paginació: comprovem si hi la pagina actual es més gran que la primera, i en cas afirmatiu, mostrem l'enllaç per tornar al principi -->
@@ -140,7 +168,7 @@ if (!isset($_SESSION['user'])){
 	<div class="form-group">
 
 		<!-- Paginació: mostra el selector de numero d'articles per pagina -->
-		<form action="index.php" method="GET">
+		<form action="webLogada.php" method="GET">
 			<label for="seleccionArticulos">Selecciona cuantos artículos quieres ver por página: </label>
 			<select id="seleccionArticulos" name="seleccionArticulos" onchange="this.form.submit()">
 				<option value="5" <?php if ($articulosPorPagina == 5) echo 'selected'; ?>>5</option>

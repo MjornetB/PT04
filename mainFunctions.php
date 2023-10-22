@@ -46,22 +46,25 @@ function mostrarArticulosUsersBBDD($conn, $articulosPorPagina, $offset, $usuariL
   $stmtTemp->execute();
   $resultatTemp = $stmtTemp->fetch(PDO::FETCH_ASSOC);
   $_SESSION['idUser'] = $resultatTemp["id"];
+  $idUser = $_SESSION['idUser'];
 
   $stmt = $conn->prepare("SELECT * FROM articles WHERE id_usuaris = :idUser LIMIT :offset, :articulosPorPagina");
   $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
   $stmt->bindParam(':articulosPorPagina', $articulosPorPagina, PDO::PARAM_INT);
-  $stmt->bindParam(':idUser', $resultatTemp['id']);
+  $stmt->bindParam(':idUser', $idUser, PDO::PARAM_INT);
   $stmt->execute();
   
 
   echo '<ul>';
-  
+  echo '<li>' . "ID" . ': ' . "ARTICLE" . '</li>';
   while ($resultat = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      echo '<li>' . $resultat['id'] . ' ' . htmlspecialchars($resultat['article']) . '</li>';
+      echo '<li>' . $resultat['id'] . ': ' . htmlspecialchars($resultat['article']) . '</li>';
   }
   
   echo '</ul>';
 }
+
+
 
 function crearArticle($conn, $article){
     $idUser = $_SESSION['idUser'];
@@ -86,18 +89,25 @@ function verificarSiArticleEsPropi($conn, $id){
 }
 
 function borrarArticle($conn, $id){
-  $stmtTemp = $conn->prepare("SELECT * FROM articles WHERE id = ?");
-  $stmtTemp->bindParam(1, $id);
-  $stmtTemp->execute();
-  $resultat = $stmtTemp->fetch(PDO::FETCH_ASSOC);
-
-  if ($resultat == ""){
-      return false;
-  }else{
+  if (existeixArticle($conn, $id)){
   $stmt = $conn->prepare("DELETE FROM articles WHERE id = ?");
   $stmt->bindParam(1, $id);
   $stmt->execute();
     return true;
+  } else {
+    return false;
+  }
+}
+
+function modificaArticle($conn, $id, $article){
+  if (existeixArticle($conn, $id)){
+    $stmt = $conn->prepare("UPDATE articles SET article = ? WHERE id = ?");
+    $stmt->bindParam(1, $article);
+    $stmt->bindParam(2, $id);
+    $stmt->execute();
+    return true;
+  } else {
+    return false;
   }
 }
 
@@ -108,5 +118,14 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
   }
+
+  function existeixArticle($conn, $id) {
+    $stmtTemp = $conn->prepare("SELECT id FROM articles WHERE id = ?");
+    $stmtTemp->bindParam(1, $id);
+    $stmtTemp->execute();
+    $resultat = $stmtTemp->fetch(PDO::FETCH_ASSOC);
+
+    return !empty($resultat); // Devuelve true si el artículo existe, false si no existe
+}
 
 ?>
